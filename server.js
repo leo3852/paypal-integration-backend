@@ -108,7 +108,10 @@ app.post("/api/orders/:captureID/refund", async (req, res) => {
       res.status(200).json(refund.data);
     } catch (err) {
         console.error("Error refunding order", err.response?.data || err.message, err.stack);
-      res.status(500).json({ error: "Error refunding order" });
+        res.status(500).json({
+          error: "Error refunding order",
+          details: err.response?.data || err.message
+        });
     }
 });
 
