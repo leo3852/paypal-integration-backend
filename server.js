@@ -10,7 +10,7 @@ app.use(express.json());
 
 const BASE_URL = "https://api-m.sandbox.paypal.com";
 
-// 🪙 Obtener token de acceso
+//get the access token
 async function generateAccessToken() {
   const response = await axios({
     url: `${BASE_URL}/v1/oauth2/token`,
@@ -26,7 +26,7 @@ async function generateAccessToken() {
   return response.data.access_token;
 }
 
-// 🔄 Crear orden
+// create an order
 app.post("/api/orders", async (req, res) => {
   try {
     const token = await generateAccessToken();
@@ -59,7 +59,7 @@ app.post("/api/orders", async (req, res) => {
   }
 });
 
-// 💳 Capturar orden
+// capture
 app.post("/api/orders/:orderID/capture", async (req, res) => {
   try {
     const token = await generateAccessToken();
@@ -89,8 +89,7 @@ app.listen(PORT, () => {
 
 
 // endpoint to refund an order
-// This endpoint will refund a captured order using the capture ID
-// not implemented yet in the front
+// will refund a captured order using the capture ID
 app.post("/api/orders/:captureID/refund", async (req, res) => {
     try {
       const token = await generateAccessToken();
@@ -108,7 +107,7 @@ app.post("/api/orders/:captureID/refund", async (req, res) => {
   
       res.status(200).json(refund.data);
     } catch (err) {
-      console.error("Error refunding order", err.message);
+        console.error("Error refunding order", err.response?.data || err.message, err.stack);
       res.status(500).json({ error: "Error refunding order" });
     }
 });
